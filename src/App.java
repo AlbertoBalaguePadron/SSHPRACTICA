@@ -30,7 +30,32 @@ public class App {
             session.setPassword(contrasena);
             session.connect();
 
+            int bucle = 0;
 
+            while (bucle == 1){
+
+                channel = (ChannelExec) session.openChannel("exec");
+
+                System.out.println("Introduce el nombre del archivo a buscar ");
+                String nombreArchivo = leer.nextLine();
+
+                System.out.println("Buscando archivo espere... ");
+                channel.setCommand("cat /var/log/" + nombreArchivo + ".log");
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                channel.setOutputStream(baos);
+
+                channel.connect();
+
+                String respuesta = new String(baos.toByteArray());
+
+                if ( respuesta == ""){
+                    System.out.println("No se encuentra el archivo seleccionado ");
+                } else {
+                    System.out.println("Archivo encontrado introduce 1 para salir y 2 para continuar");
+                    bucle = leer.nextInt();
+                }
+            }
 
             System.out.println("Programa finalizado....");
 
